@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zalup.ca registration</title>
+    <script src="js/base.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.5.0.js"
+            integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div style="text-align: center">
+    <label>
+        Login:
+        <input id="login" type="text">
+    </label>
+    <br>
+    <label>
+        Password:
+        <input id="pass1" type="text">
+    </label>
+    <br>
+    <label>
+        Repeat password:
+        <input id="pass2" type="text">
+    </label><br>
+    <button id="register">Register</button>
+    <button id="loginAction">Login</button>
+
+</div>
+<script>
+    $("#register").click(function () {
+        const pass1 = $("#pass1").val();
+        const pass2 = $("#pass2").val();
+        const login = $("#login").val();
+
+        if (pass1 === pass2) {
+            var user = new Object();
+            user.login = login;
+            user.password = pass1;
+            var response;
+            $.when(register("http://localhost:8080/register", user, response)).done(function () {
+                localStorage.setItem("user",btoa(login + ":" + pass1));
+                console.log("Done");
+            }).fail(function () {
+                console.log("Error");
+            })
+
+        }
+    });
+
+    $("#loginAction").click(function () {
+        const pass1 = $("#pass1").val();
+        const login = $("#login").val();
+        localStorage.setItem("user",btoa(login + ":" + pass1));
+        window.location.href="index.html";
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+.demo-card-image.mdl-card {
+    width: 256px;
+    height: 256px;
+    background-size: contain;
+    background: url('../img/test.jpg') no-repeat center;
+}
+.demo-card-image > .mdl-card__actions {
+    height: 52px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.2);
+}
+.demo-card-image__filename {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+}
+.card-container{
+    display: grid;
+    padding: 1%;
+    grid-template-columns: repeat(5, 1fr);
+    grid-row-gap: 2%;
+}
+.card{
+    margin: 1%;
+}

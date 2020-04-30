@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script
+            src="https://code.jquery.com/jquery-3.5.0.js"
+            integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+            crossorigin="anonymous"></script>
+</head>
+<body>
+
+<form>
+    <label for="image">Direct image url:</label>
+    <input id="image" type="text"><br>
+    <label for="description">Post description:</label>
+    <input id="description" type="text"><br>
+    <label for="timeToLive">Time in hours before destruction:</label>
+    <input id="timeToLive" type="number"><br>
+</form>
+<button id="submit">Post</button>
+
+
+<script>
+    $("#submit").click(
+        function () {
+            console.log("Button");
+            $.ajax({
+                type: 'POST',
+                url: "http://localhost:8080/createPost",
+                dataType: 'json',
+                contentType: 'application/json',
+                //crossDomain: true,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa("pidor:4815162342"));
+                },
+                data: JSON.stringify(getData()),
+                processData: false,
+                success: function (data) {
+                    //$('#response pre').html( JSON.stringify( data ) );
+                    console.log("done");
+                },
+                error: function (jqXhr, textStatus, errorThrown) {
+                    console.log(textStatus);
+                }
+            });
+        }
+    );
+
+    function getData() {
+        var data = new Object();
+        data.text = $("#description").val();
+        data.image = $("#image").val();
+        data.timeToLive = $("#timeToLive").val();
+        return data;
+    }
+</script>
+
+</body>
+</html>
