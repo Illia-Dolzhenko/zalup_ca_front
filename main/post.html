@@ -153,7 +153,7 @@
     // });
 
     $(document).ready(
-        sendGet("http://localhost:8080/getPost/" + getId(),renderPost)
+        sendGet(GET_POST_URL + getId(),renderPost)
     );
 
     function renderPost(data){
@@ -179,7 +179,7 @@
     $("#postComment").click(function () {
         $.ajax({
             type: 'POST',
-            url: "http://localhost:8080/addComment",
+            url: ADD_COMMENT_URL,
             dataType: 'json',
             contentType: 'application/json',
             beforeSend: function (xhr) {

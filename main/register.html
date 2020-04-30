@@ -40,7 +40,7 @@
             user.login = login;
             user.password = pass1;
             var response;
-            $.when(register("http://localhost:8080/register", user, response)).done(function () {
+            $.when(register(REGISTER_URL, user, response)).done(function () {
                 localStorage.setItem("user",btoa(login + ":" + pass1));
                 console.log("Done");
             }).fail(function () {
