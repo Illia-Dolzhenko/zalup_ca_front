@@ -1,8 +1,11 @@
 const GET_POSTS_URL = "http://localhost:8080/getPosts";
-const GET_POST_URL = "http://localhost:8080/getPost";
+const GET_POST_URL = "http://localhost:8080/getPost/";
 const CREATE_POST_URL = "http://localhost:8080/createPost";
 const ADD_COMMENT_URL = "http://localhost:8080/addComment";
 const REGISTER_URL = "http://localhost:8080/register";
+const CATEGORIES_URL = "http://localhost:8080/categories";
+const RATE_URL = "http://localhost:8080/addRating";
+
 const REGISTER_PAGE = "register.html";
 
 function sendGet(url, success) {
@@ -32,7 +35,7 @@ function sendGet(url, success) {
 function sendPost(url, dataToSend, success) {
     const user = getUser()
 
-    $.ajax({
+    return $.ajax({
         type: 'POST',
         url: url,
         dataType: 'json',
@@ -80,4 +83,8 @@ function register(url, user, response) {
             //console.log(data);
         }
     });
+}
+
+function getId() {
+    return localStorage.getItem("postId");
 }

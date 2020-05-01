@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="js/base.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.5.0.js"
+            integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+            crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div id="optionContainer">
+    <div id="option" class="voteResult">
+        Vote for <span id="category">cat</span>
+        <input id="score" type="number" max="10" min="1" value="1">
+        <button id="removeButton">Remove</button>
+    </div>
+    <button id="vote">
+        Vote
+    </button>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        sendGet(CATEGORIES_URL, renderOptions);
+    });
+
+    function renderOptions(data) {
+
+        const container = $("#optionContainer");
+        const temp = $("#option").clone();
+        $("#option").remove();
+
+        data.forEach(function (element, i) {
+            const option = temp.clone();
+            option.attr("id", "option_" + i);
+            option.find("#category").html(element);
+            option.find("#removeButton").click(function (e) {
+                $(e.target).parent().remove();
+            })
+            container.prepend(option);
+        });
+    }
+    
+    $("#vote").click(function () {
+        $(".voteResult").each(function (i) {
+            const score = $(this).find("#score").val();
+            const cat = $(this).find("#category").html();
+
+            var data = new Object();
+            data.postId = getId();
+            data.score = score;
+            data.category = cat;
+
+            sendPost(RATE_URL,data,function (data) {
+                console.log(data);
+            })
+
+        })
+    });
+
+</script>
+
+</body>
+</html>

@@ -116,12 +116,6 @@
 
 <script>
 
-    function getId() {
-        var id = localStorage.getItem("postId");
-        return id;
-        //console.log("Id from localStorage: " + id);
-    }
-
     // $.ajax
     // ({
     //     type: "GET",
@@ -153,10 +147,10 @@
     // });
 
     $(document).ready(
-        sendGet(GET_POST_URL + getId(),renderPost)
+        sendGet(GET_POST_URL + getId(), renderPost)
     );
 
-    function renderPost(data){
+    function renderPost(data) {
         console.log(data);
         $("#image").attr("src", data.image);
         $("#postCreator").html(data.user.login + "<span>" + data.creationDate + "</span>");
@@ -173,6 +167,14 @@
             commentContainer.append(temp);
             console.log(comment.id + ": " + comment.text);
         });
+
+        const ratings = data.averageRatings;
+
+        for(var category in ratings){
+            if(ratings.hasOwnProperty(category)){
+                console.log(category + ": " + ratings[category]);
+            }
+        }
 
     }
 
