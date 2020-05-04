@@ -85,6 +85,14 @@
                 <span>date</span>
             </p>
         </div>
+
+        <div id="rateContainer" class="sign">
+            <p id="rating" class="username">
+                category
+                <span>score</span>
+            </p>
+        </div>
+
         <div class="description" id="description">i love big tits</div>
         <div class="comments" id="comments">
             <div class="comment" id="comment">
@@ -116,36 +124,6 @@
 
 <script>
 
-    // $.ajax
-    // ({
-    //     type: "GET",
-    //     url: "http://localhost:8080/getPost/" + getId(),
-    //     dataType: 'json',
-    //     crossDomain: true,
-    //     beforeSend: function (xhr) {
-    //         xhr.setRequestHeader("Authorization", "Basic " + btoa("pidor:4815162342"));
-    //     },
-    //     success: function (data) {
-    //         console.log(data);
-    //         $("#image").attr("src", data.image);
-    //         $("#postCreator").html(data.user.login + "<span>"+data.creationDate+"</span>");
-    //         $("#description").html(data.text);
-    //
-    //         var commentContainer = $("#comments");
-    //         var newComment = $("#comment").clone();
-    //         $("#comment").remove();
-    //
-    //         $.each(data.comments, function (i,comment) {
-    //             var temp = newComment.clone();
-    //             temp.find("#userComment").html(comment.text);
-    //             temp.find("#commentInfo").html(comment.user.login + "<span>"+comment.created+"</span>");
-    //             commentContainer.append(temp);
-    //             console.log(comment.id + ": " + comment.text);
-    //         });
-    //
-    //     }
-    // });
-
     $(document).ready(
         sendGet(GET_POST_URL + getId(), renderPost)
     );
@@ -169,34 +147,27 @@
         });
 
         const ratings = data.averageRatings;
+        const ratingContainer = $("#rateContainer");
+        var rating = $("#rating").clone();
+        $("#rating").remove();
 
-        for(var category in ratings){
-            if(ratings.hasOwnProperty(category)){
-                console.log(category + ": " + ratings[category]);
+        for (const category in ratings) {
+            if (ratings.hasOwnProperty(category)) {
+                rating = rating.clone();
+                rating.html(category + "<span>" + parseFloat(ratings[category]).toPrecision(2) + "</span>");
+                ratingContainer.prepend(rating);
+                console.log(category + ": " + parseFloat(ratings[category]).toPrecision(2));
             }
         }
 
     }
 
     $("#postComment").click(function () {
-        $.ajax({
-            type: 'POST',
-            url: ADD_COMMENT_URL,
-            dataType: 'json',
-            contentType: 'application/json',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader("Authorization", "Basic " + btoa("pidor:4815162342"));
-            },
-            data: JSON.stringify(getData()),
-            processData: false,
-            success: function (data) {
-                console.log(data);
-                $("#commentText").val(" ");
-                location.reload();
-            },
-            error: function (jqXhr, textStatus, errorThrown) {
-                console.log(textStatus);
-            }
+
+        sendPost(ADD_COMMENT_URL,getData(),function (data) {
+            console.log(data);
+            $("#commentText").val(" ");
+            location.reload();
         });
     });
 

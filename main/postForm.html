@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="js/base.js"></script>
     <script
             src="https://code.jquery.com/jquery-3.5.0.js"
             integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
@@ -24,25 +25,8 @@
 <script>
     $("#submit").click(
         function () {
-            console.log("Button");
-            $.ajax({
-                type: 'POST',
-                url: CREATE_POST_URL,
-                dataType: 'json',
-                contentType: 'application/json',
-                //crossDomain: true,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader("Authorization", "Basic " + btoa("pidor:4815162342"));
-                },
-                data: JSON.stringify(getData()),
-                processData: false,
-                success: function (data) {
-                    //$('#response pre').html( JSON.stringify( data ) );
-                    console.log("done");
-                },
-                error: function (jqXhr, textStatus, errorThrown) {
-                    console.log(textStatus);
-                }
+            sendPost(CREATE_POST_URL,getData(), function f(data) {
+                console.log("Success");
             });
         }
     );

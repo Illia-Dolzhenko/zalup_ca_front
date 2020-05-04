@@ -1,10 +1,10 @@
-const GET_POSTS_URL = "http://localhost:8080/getPosts";
-const GET_POST_URL = "http://localhost:8080/getPost/";
-const CREATE_POST_URL = "http://localhost:8080/createPost";
-const ADD_COMMENT_URL = "http://localhost:8080/addComment";
-const REGISTER_URL = "http://localhost:8080/register";
-const CATEGORIES_URL = "http://localhost:8080/categories";
-const RATE_URL = "http://localhost:8080/addRating";
+const GET_POSTS_URL = "http://192.168.1.148:8080/getPosts";
+const GET_POST_URL = "http://192.168.1.148:8080/getPost/";
+const CREATE_POST_URL = "http://192.168.1.148:8080/createPost";
+const ADD_COMMENT_URL = "http://192.168.1.148:8080/addComment";
+const REGISTER_URL = "http://192.168.1.148:8080/register";
+const CATEGORIES_URL = "http://192.168.1.148:8080/categories";
+const RATE_URL = "http://192.168.1.148:8080/addRating";
 
 const REGISTER_PAGE = "register.html";
 
@@ -33,7 +33,7 @@ function sendGet(url, success) {
 }
 
 function sendPost(url, dataToSend, success) {
-    const user = getUser()
+    const user = getUser();
 
     return $.ajax({
         type: 'POST',
