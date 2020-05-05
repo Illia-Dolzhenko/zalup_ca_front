@@ -36,39 +36,6 @@
 </div>
 
 <script>
-    // $.ajax
-    // ({
-    //     type: "GET",
-    //     url: "http://localhost:8080/getPosts",
-    //     dataType: 'json',
-    //     crossDomain: true,
-    //     beforeSend: function (xhr) {
-    //         xhr.setRequestHeader ("Authorization", "Basic " + btoa("pidor:4815162342"));
-    //     },
-    //     success: function (data){
-    //
-    //         var element = $("#post").clone();
-    //         $("#post").remove();
-    //         element.removeAttr("hidden");
-    //         var posts = $("#posts");
-    //
-    //         $.each(data, function(i, post){
-    //             var p = element.clone();
-    //             p.find("input").val(post.id);
-    //             p.css("background","url(" + post.image + ") no-repeat center");
-    //             p.css("background-size","contain");
-    //
-    //
-    //             console.log(p.css("background-size"));
-    //
-    //             p.find("#text").html(post.id + " : " + post.text);
-    //             p.find("#id").val(post.id);
-    //             console.log(post.id);
-    //             posts.append(p);
-    //         });
-    //         console.log(data);
-    //     }
-    // });
 
     $(document).ready(
         sendGet(GET_POSTS_URL,renderPosts)

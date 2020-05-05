@@ -42,6 +42,7 @@
             var response;
             $.when(register(REGISTER_URL, user, response)).done(function () {
                 localStorage.setItem("user",btoa(login + ":" + pass1));
+                localStorage.setItem("login",login);
                 console.log("Done");
             }).fail(function () {
                 console.log("Error");
@@ -54,6 +55,7 @@
         const pass1 = $("#pass1").val();
         const login = $("#login").val();
         localStorage.setItem("user",btoa(login + ":" + pass1));
+        localStorage.setItem("login",login);
         window.location.href="index.html";
     });
 </script>

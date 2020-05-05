@@ -104,7 +104,7 @@
                     asaadss
                 </div>
                 <div class="button">
-                    <button type="button">
+                    <button id="upVote" type="button">
                         <img src="https://img.icons8.com/ios/500/like.png" width="30px" height="30px"/>
                     </button>
                 </div>
@@ -142,6 +142,9 @@
             var temp = newComment.clone();
             temp.find("#userComment").html(comment.text);
             temp.find("#commentInfo").html(comment.user.login + "<span>" + comment.created + "</span>");
+            if(comment.user.login === localStorage.getItem("login")){
+                temp.find("#upVote").attr("hidden","true");
+            }
             commentContainer.append(temp);
             console.log(comment.id + ": " + comment.text);
         });
@@ -169,6 +172,10 @@
             $("#commentText").val(" ");
             location.reload();
         });
+    });
+
+    $(document).on("click","#upVote", function (e) {
+        console.log("upvoting")
     });
 
     function getData() {
