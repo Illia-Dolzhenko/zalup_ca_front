@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Залупка</title>
+    <link rel="stylesheet" href="ie.css">
+    <link rel="shortcut icon" href="https://image.flaticon.com/icons/png/512/105/105392.png">
+    <script src="js/base.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.5.0.js"
+            integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+            crossorigin="anonymous"></script>
+    <meta charset="utf-8">
+    <style>
+        body {
+            background-color: rgba(34, 206, 120, 0.281);
+        }
+
+        p {
+            text-align: center; /* Выравнивание по центру */
+        }
+
+        .sign {
+            background-color: rgba(1, 1, 1, 0.1);
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: large;
+            color: black;
+            margin-top: 0px;
+            margin-left: 200px;
+            margin-right: 200px;
+        }
+
+        .image {
+            /*position: absolute;*/
+            text-align: center;
+            width: 80%;
+        }
+
+        .username {
+            text-align: left;
+            padding-right: 5%;
+            padding-left: 5%;
+        }
+
+        span {
+            float: right;
+            /*display: inline;*/
+        }
+
+        .description {
+            background-color: black;
+            margin: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .comment {
+            background-color: black;
+            margin: 10px;
+            color: white;
+        }
+
+        .username1 {
+            text-align: left;
+            padding-right: 5%;
+            padding-left: 5%;
+        }
+
+        .button {
+            text-align: right;
+            margin-right: 5%;
+            margin-bottom: 5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<section>
+    <div class="image" id="post">
+        <img id="image" src="" alt="picture"
+             width="80%">
+        <div class="sign">
+            <p id="postCreator" class="username">
+                username
+                <span>date</span>
+            </p>
+        </div>
+
+        <div id="rateContainer" class="sign">
+            <p id="rating" class="username">
+                category
+                <span>score</span>
+            </p>
+        </div>
+
+        <div class="description" id="description">i love big tits</div>
+        <div class="comments" id="comments">
+            <div class="comment" id="comment">
+                <p id="commentInfo" class="username1">
+                    username
+                    <span>date</span>
+                </p>
+                <div id="userComment">
+                    asaadss
+                </div>
+                <div class="button">
+                    <button id="upVote" type="button">
+                        <img src="https://img.icons8.com/ios/500/like.png" width="30px" height="30px"/>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div>
+
+            <label for="commentText">
+                Add a comment.
+            </label>
+            <textarea id="commentText" type="text">asd</textarea>
+            <button id="postComment">Post</button>
+        </div>
+    </div>
+</section>
+
+<script>
+
+    $(document).ready(
+        sendGet(GET_POST_URL + getId(), renderPost)
+    );
+
+    function renderPost(data) {
+        console.log(data);
+        $("#image").attr("src", data.image);
+        $("#postCreator").html(data.user.login + "<span>" + data.creationDate + "</span>");
+        $("#description").html(data.text);
+
+        var commentContainer = $("#comments");
+        var newComment = $("#comment").clone();
+        $("#comment").remove();
+
+        $.each(data.comments, function (i, comment) {
+            var temp = newComment.clone();
+            temp.find("#userComment").html(comment.text);
+            temp.find("#commentInfo").html(comment.user.login + "<span>" + comment.created + "</span>");
+            if(comment.user.login === localStorage.getItem("login")){
+                temp.find("#upVote").attr("hidden","true");
+            }
+            commentContainer.append(temp);
+            console.log(comment.id + ": " + comment.text);
+        });
+
+        const ratings = data.averageRatings;
+        const ratingContainer = $("#rateContainer");
+        var rating = $("#rating").clone();
+        $("#rating").remove();
+
+        for (const category in ratings) {
+            if (ratings.hasOwnProperty(category)) {
+                rating = rating.clone();
+                rating.html(category + "<span>" + parseFloat(ratings[category]).toPrecision(2) + "</span>");
+                ratingContainer.prepend(rating);
+                console.log(category + ": " + parseFloat(ratings[category]).toPrecision(2));
+            }
+        }
+
+    }
+
+    $("#postComment").click(function () {
+
+        sendPost(ADD_COMMENT_URL,getData(),function (data) {
+            console.log(data);
+            $("#commentText").val(" ");
+            location.reload();
+        });
+    });
+
+    $(document).on("click","#upVote", function (e) {
+        console.log("upvoting")
+    });
+
+    function getData() {
+        var data = new Object();
+        data.text = $("#commentText").val();
+        data.postId = getId();
+        return data;
+    }
+
+
+</script>
+</body>
+</html>
