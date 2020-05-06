@@ -103,7 +103,7 @@
 </head>
 <body>
 
-<div id="post" class="mdl-card mdl-shadow--8dp post">
+<div hidden id="post" class="mdl-card mdl-shadow--8dp post">
 
     <img id="image" src="" alt="image">
 
@@ -126,7 +126,7 @@
 
 </div>
 
-<div id="commentContainer">
+<div hidden id="commentContainer">
     <div id="comment" class="mdl-card mdl-shadow--8dp post commentBox">
         <div class="text">
             <div id="commenterLogin" class="left">username</div>
@@ -164,12 +164,14 @@
 
     function renderPost(data) {
         console.log(data);
+        $("#post").removeAttr("hidden");
         $("#image").attr("src", data.image);
         $("#creatorLogin").html(data.user.login);
         $("#postCreation").html(new Date(data.creationDate).toLocaleString());
         $("#description").html(data.text);
 
         var commentContainer = $("#commentContainer");
+        commentContainer.removeAttr("hidden");
         var newComment = $("#comment").clone();
         $("#comment").remove();
 

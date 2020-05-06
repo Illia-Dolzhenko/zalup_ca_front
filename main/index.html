@@ -9,9 +9,9 @@
     <meta name="author" content="FartSniffer">
 
     <link rel="stylesheet" href="css/card.css?v=1.0">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
-    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <!--    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
+    <!--    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">-->
+    <!--    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>-->
     <script src="js/base.js"></script>
 
     <script
@@ -19,62 +19,66 @@
             integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
             crossorigin="anonymous"></script>
 
-    <style>
-        body{
-            background-color: gainsboro;
-        }
-
-    </style>
-
 </head>
 
 <body>
 
 <div id="posts" class="card-container">
 
-    <div  hidden="true" id="post" class="demo-card-image mdl-card mdl-shadow--8dp card">
-        <input id="id" type="hidden" value="">
-        <div class="mdl-card__title mdl-card--expand"></div>
-        <div class="mdl-card__actions">
-            <span id="text" class="demo-card-image__filename">POST TEXT</span>
+    <div hidden id="post" class="post">
+        <input id="postId" type="hidden" value="">
+        <img id="image" src="" alt="image"/>
+        <div class="text">
+            <div class="userInfo">
+                <div id="login" class="left">username</div>
+                <div id="created" class="left right">date</div>
+            </div>
+            <div id="description" class="description">
+                texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext
+            </div>
         </div>
     </div>
-
 </div>
 
 <script>
 
     $(document).ready(
-        sendGet(GET_POSTS_URL,renderPosts)
+        sendGet(GET_POSTS_URL, renderPosts)
     );
 
-    
-    $(document).on("click",".mdl-card__title.mdl-card--expand",
+
+    $(document).on("click", "#post",
         function (event) {
-        var id = $(event.target).prev().val();
+            const id = $(this).find("#postId").val();
             console.log(id);
             localStorage.setItem("postId",id);
             window.location.href="post.html";
         }
     );
 
-    function renderPosts(data){
+    function renderPosts(data) {
         var element = $("#post").clone();
         $("#post").remove();
         element.removeAttr("hidden");
         var posts = $("#posts");
 
-        $.each(data, function(i, post){
+        $.each(data, function (i, post) {
             var p = element.clone();
-            p.find("input").val(post.id);
-            p.css("background","url(" + post.image + ") no-repeat center");
-            p.css("background-size","contain");
+            //p.find("input").val(post.id);
+            p.find("#image").attr("src", post.image);
 
+            //
+            //
+            // p.css("background","url(" + post.image + ") no-repeat center");
+            // p.css("background-size","contain");
+            //
+            //
+            // console.log(p.css("background-size"));
 
-            console.log(p.css("background-size"));
-
-            p.find("#text").html(post.id + " : " + post.text);
-            p.find("#id").val(post.id);
+            p.find("#login").html(post.user.login);
+            p.find("#created").html(new Date(post.creationDate).toLocaleString());
+            p.find("#description").html(post.id + " : " + post.text);
+            p.find("#postId").val(post.id);
             console.log(post.id);
             posts.append(p);
         });
