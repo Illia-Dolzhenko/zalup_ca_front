@@ -76,8 +76,8 @@
         }
 
         .userComment {
-            margin: 0 2%;
-            width: 100vw;
+            /*margin: 0 2%;*/
+            width: 100%;
         }
 
         .commentButton {
@@ -90,10 +90,33 @@
 
         .thumb_up {
             margin: 1%;
+            cursor: pointer;
         }
 
         .thumb_up_counter {
             margin: 1% 0;
+        }
+
+        .userCommentBox {
+            width: 96%;
+            margin: auto 2%;
+        }
+
+        .popup {
+            position: absolute;
+            width: 25%;
+            height: 40%;
+            background-color: white;
+            box-shadow: 0 0 25px black;
+            top: 30vh;
+            left: 37.5%;
+            z-index: 1;
+            border-radius: 3px;
+        }
+
+        .addRatingButton{
+            margin-left: auto;
+            margin-right: auto;
         }
 
 
@@ -119,6 +142,12 @@
         </div>
     </div>
 
+    <div class="addRatingButton">
+        <button id="addRating" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+            <i class="material-icons">add</i>
+        </button>
+    </div>
+
 
     <div id="description" class="description">
         description
@@ -128,6 +157,7 @@
 
 <div hidden id="commentContainer">
     <div id="comment" class="mdl-card mdl-shadow--8dp post commentBox">
+        <input id="commentId" type="hidden" value="">
         <div class="text">
             <div id="commenterLogin" class="left">username</div>
             <div id="commentCreation" class="left right">date</div>
@@ -136,31 +166,49 @@
             comment text
         </div>
         <div id="thumb_up">
-            <i  id="thumb_icon" class="material-icons right thumb_up">thumb_up</i>
+            <i id="thumb_icon" class="material-icons right thumb_up">thumb_up</i>
             <div id="voteCount" class="left right thumb_up_counter">12</div>
-        </div>
-    </div>
-
-    <div class="mdl-card mdl-shadow--8dp post commentBox">
-        <div class="mdl-textfield mdl-js-textfield">
-            <textarea id="newCommentText" class="mdl-textfield__input userComment" type="text" rows="3"></textarea>
-            <label class="mdl-textfield__label userComment" for="newCommentText">Your comment...</label>
-        </div>
-
-        <div>
-            <button id="sendComment" class="mdl-button mdl-js-button mdl-button--raised commentButton">
-                Send
-            </button>
         </div>
     </div>
 
 </div>
 
+<div class="mdl-card mdl-shadow--8dp post commentBox">
+    <div class="mdl-textfield mdl-js-textfield userCommentBox">
+        <textarea id="newCommentText" class="mdl-textfield__input userComment" type="text" rows="3"></textarea>
+        <label class="mdl-textfield__label userComment" for="newCommentText">Your comment...</label>
+    </div>
+
+    <div>
+        <button id="sendComment" class="mdl-button mdl-js-button mdl-button--raised commentButton">
+            Send
+        </button>
+    </div>
+</div>
+
+<div id="dialog" class="popup" hidden>
+    <div id="optionContainer">
+        <div id="option" class="voteResult">
+            Vote for <span id="newCategory">cat</span>
+            <input id="newScore" type="number" max="10" min="1" value="1">
+            <button id="removeButton">Remove</button>
+        </div>
+        <button id="vote">
+            Vote
+        </button>
+    </div>
+</div>
+
 <script>
 
     $(document).ready(
-        sendGet(GET_POST_URL + getId(), renderPost)
+        drawAll
     );
+
+    function drawAll() {
+        sendGet(GET_POST_URL + getId(), renderPost);
+        sendGet(CATEGORIES_URL, renderOptions);
+    }
 
     function renderPost(data) {
         console.log(data);
@@ -174,6 +222,7 @@
         commentContainer.removeAttr("hidden");
         var newComment = $("#comment").clone();
         $("#comment").remove();
+        commentContainer.empty();
 
         $.each(data.comments, function (i, comment) {
             var temp = newComment.clone();
@@ -181,9 +230,7 @@
             temp.find("#commenterLogin").html(comment.user.login);
             temp.find("#commentCreation").html(new Date(comment.created).toLocaleString());
             temp.find("#voteCount").html(comment.numberOfUpVotes);
-            // if (comment.user.login === localStorage.getItem("login")) {
-            //     temp.find("#thumb_icon").attr("hidden", "true");
-            // }
+            temp.find("#commentId").val(comment.id);
             commentContainer.append(temp);
             console.log(comment.id + ": " + comment.text);
         });
@@ -192,6 +239,7 @@
         const ratingContainer = $("#ratingContainer");
         var rating = $("#rating").clone();
         $("#rating").remove();
+        ratingContainer.empty()
 
         for (const category in ratings) {
             if (ratings.hasOwnProperty(category)) {
@@ -210,14 +258,21 @@
         sendPost(ADD_COMMENT_URL, getData(), function (data) {
             console.log(data);
             $("#newCommentText").val(" ");
-            location.reload();
+            drawAll();
+            //location.reload();
         });
     });
 
     $(document).on("click", "#thumb_icon", function (e) {
         const commenterLogin = $(e.target).parent().parent().find("#commenterLogin").html();
-        if(commenterLogin === localStorage.getItem("login")){
+        const id = $(this).parent().parent().find("#commentId").val();
+        if (commenterLogin === localStorage.getItem("login")) {
             console.log("You cannot voteUp your comment.");
+        } else {
+            sendPost(VOTE_UP_URL + id, null, function (data) {
+                console.log(data);
+                drawAll();
+            });
         }
     });
 
@@ -226,6 +281,31 @@
         data.text = $("#newCommentText").val();
         data.postId = getId();
         return data;
+    }
+
+    $(document).on("click", "#dialog", function (e) {
+        $(this).attr("hidden", "true");
+    });
+
+    $(document).on("click", "#addRating", function(){
+        $("#dialog").removeAttr("hidden");
+    });
+
+    function renderOptions(data) {
+
+        const container = $("#optionContainer");
+        const temp = $("#option").clone();
+        $("#option").remove();
+
+        data.forEach(function (element, i) {
+            const option = temp.clone();
+            option.attr("id", "option_" + i);
+            option.find("#newCategory").html(element);
+            option.find("#removeButton").click(function (e) {
+                $(e.target).parent().remove();
+            })
+            container.prepend(option);
+        });
     }
 
 

@@ -5,6 +5,7 @@ const ADD_COMMENT_URL = "http://192.168.1.148:8080/addComment";
 const REGISTER_URL = "http://192.168.1.148:8080/register";
 const CATEGORIES_URL = "http://192.168.1.148:8080/categories";
 const RATE_URL = "http://192.168.1.148:8080/addRating";
+const VOTE_UP_URL = "http://192.168.1.148:8080/upVote/";
 
 const REGISTER_PAGE = "register.html";
 
@@ -35,7 +36,7 @@ function sendGet(url, success) {
 function sendPost(url, dataToSend, success) {
     const user = getUser();
 
-    return $.ajax({
+    const dataSettings = {
         type: 'POST',
         url: url,
         dataType: 'json',
@@ -47,13 +48,47 @@ function sendPost(url, dataToSend, success) {
         processData: false,
         success: function (data) {
             success(data);
-        },
-        error: function (xhr) {
-            if (xhr.status === 401) {
-                window.location.href = REGISTER_PAGE;
-            }
         }
-    });
+    };
+
+    const noDataSettings ={
+        type: 'POST',
+        url: url,
+        dataType: 'json',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Basic " + user);
+        },
+        success: function (data) {
+            success(data);
+        }
+    };
+
+    if(dataToSend == null){
+        return $.ajax(noDataSettings);
+    }else {
+        return $.ajax(dataSettings);
+    }
+
+
+    // return $.ajax({
+    //     type: 'POST',
+    //     url: url,
+    //     dataType: 'json',
+    //     contentType: 'application/json',
+    //     beforeSend: function (xhr) {
+    //         xhr.setRequestHeader("Authorization", "Basic " + user);
+    //     },
+    //     data: JSON.stringify(dataToSend),
+    //     processData: false,
+    //     success: function (data) {
+    //         success(data);
+    //     },
+    //     error: function (xhr) {
+    //         if (xhr.status === 401) {
+    //             window.location.href = REGISTER_PAGE;
+    //         }
+    //     }
+    // });
 }
 
 function getUser() {
