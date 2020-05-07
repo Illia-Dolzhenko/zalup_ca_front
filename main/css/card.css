@@ -1,24 +1,7 @@
-.demo-card-image.mdl-card {
-    width: 256px;
-    height: 256px;
-    background-size: contain;
-    background: url('../img/test.jpg') no-repeat center;
-}
-
-.demo-card-image > .mdl-card__actions {
-    height: 52px;
-    padding: 16px;
-    background: rgba(0, 0, 0, 0.2);
-}
-
-.demo-card-image__filename {
-    color: #fff;
-    font-size: 14px;
-    font-weight: 500;
-}
-
 body{
     background-color: gainsboro;
+    margin: 0;
+    padding: 0;
 }
 
 .card-container {
@@ -34,7 +17,6 @@ body{
 
 .post {
     width: fit-content;
-    /*height: 35vh;*/
     height: fit-content;
     margin-left: auto;
     margin-right: auto;
@@ -85,3 +67,4 @@ img {
 .description{
     margin: 2%;
 }
+

@@ -3,30 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="js/base.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <script
             src="https://code.jquery.com/jquery-3.5.0.js"
             integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/base.css?v=1.0">
+    <link rel="stylesheet" href="css/header.css?v=1.0">
+    <script src="js/base.js"></script>
+    <script src="js/header.js"></script>
+
+
+    <style>
+        .title{
+            text-align: center;
+            padding-top: 5%;
+            font-size: large;
+        }
+
+        .buttonCentre{
+            text-align: center;
+        }
+    </style>
+
 </head>
 <body>
 
-<form>
-    <label for="image">Direct image url:</label>
-    <input id="image" type="text"><br>
-    <label for="description">Post description:</label>
-    <input id="description" type="text"><br>
-    <label for="timeToLive">Time in hours before destruction:</label>
-    <input id="timeToLive" type="number"><br>
-</form>
-<button id="submit">Post</button>
+<div class="header">
+    <div class="siteName">
+        <a href="index.html">Zalupka.xyz</a>
+    </div>
+
+
+    <div class="font currentUser">
+        <div class="menu">
+            <div>
+                <a href="postForm.html">[New Post]</a>
+            </div>
+            <div id="logOutAction">
+                [LogOut]
+            </div>
+        </div>
+        <div id="currentUserLogin">
+        </div>
+        <div id="currentUserPoints" class="points">
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="content">
+
+        <div class="title">
+            Post creation
+        </div>
+
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="image">
+            <label class="mdl-textfield__label" for="image">Direct image url:</label>
+        </div>
+        <br>
+
+        <div class="mdl-textfield mdl-js-textfield">
+            <textarea class="mdl-textfield__input" type="text" rows= "3" id="description" ></textarea>
+            <label class="mdl-textfield__label" for="description">Post description...</label>
+        </div>
+
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="timeToLive">
+            <label class="mdl-textfield__label" for="timeToLive">Time to live (hours)...</label>
+            <span class="mdl-textfield__error">Input is not a number!</span>
+        </div>
+
+        <div class="buttonCentre">
+            <button id="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                Submit
+            </button>
+        </div>
+
+    </div>
+</div>
 
 
 <script>
     $("#submit").click(
         function () {
-            sendPost(CREATE_POST_URL,getData(), function f(data) {
-                console.log("Success");
+            sendPost(CREATE_POST_URL, getData(), function f(data) {
+                //console.log(data);
+                localStorage.setItem("postId", data.id);
+                window.location.href = "post.html";
             });
         }
     );

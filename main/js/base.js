@@ -6,6 +6,7 @@ const REGISTER_URL = "http://192.168.1.148:8080/register";
 const CATEGORIES_URL = "http://192.168.1.148:8080/categories";
 const RATE_URL = "http://192.168.1.148:8080/addRating";
 const VOTE_UP_URL = "http://192.168.1.148:8080/upVote/";
+const CURRENT_USER = "http://192.168.1.148:8080/user";
 
 const REGISTER_PAGE = "register.html";
 
@@ -68,27 +69,6 @@ function sendPost(url, dataToSend, success) {
     }else {
         return $.ajax(dataSettings);
     }
-
-
-    // return $.ajax({
-    //     type: 'POST',
-    //     url: url,
-    //     dataType: 'json',
-    //     contentType: 'application/json',
-    //     beforeSend: function (xhr) {
-    //         xhr.setRequestHeader("Authorization", "Basic " + user);
-    //     },
-    //     data: JSON.stringify(dataToSend),
-    //     processData: false,
-    //     success: function (data) {
-    //         success(data);
-    //     },
-    //     error: function (xhr) {
-    //         if (xhr.status === 401) {
-    //             window.location.href = REGISTER_PAGE;
-    //         }
-    //     }
-    // });
 }
 
 function getUser() {

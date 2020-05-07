@@ -4,29 +4,67 @@
     <meta charset="UTF-8">
     <title>Zalup.ca registration</title>
     <script src="js/base.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <script
             src="https://code.jquery.com/jquery-3.5.0.js"
             integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
             crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            background-color: gainsboro;
+        }
+
+        .card {
+            margin: 10% auto;
+            background-color: white;
+            width: min-content;
+            border-radius: 3px;
+            box-shadow: 0 0 25px gray;
+        }
+
+        .card button {
+            margin-right: 5%;;
+        }
+
+        .content{
+            margin: 5%;
+            padding-bottom: 5%;
+        }
+
+    </style>
+
+
 </head>
 <body>
-<div style="text-align: center">
-    <label>
-        Login:
-        <input id="login" type="text">
-    </label>
-    <br>
-    <label>
-        Password:
-        <input id="pass1" type="text">
-    </label>
-    <br>
-    <label>
-        Repeat password:
-        <input id="pass2" type="text">
-    </label><br>
-    <button id="register">Register</button>
-    <button id="loginAction">Login</button>
+<div class="card">
+    <div class="content">
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="login">
+            <label class="mdl-textfield__label" for="login">Login...</label>
+        </div>
+        <br>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="pass1">
+            <label class="mdl-textfield__label" for="pass1">Password...</label>
+        </div>
+        <br>
+        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+            <input class="mdl-textfield__input" type="text" id="pass2">
+            <label class="mdl-textfield__label" for="pass2">Confirm password...</label>
+        </div>
+        <br>
+
+        <button id="register" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            Register
+        </button>
+
+        <button id="loginAction" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+            LogIn
+        </button>
+    </div>
 
 </div>
 <script>
@@ -41,8 +79,8 @@
             user.password = pass1;
             var response;
             $.when(register(REGISTER_URL, user, response)).done(function () {
-                localStorage.setItem("user",btoa(login + ":" + pass1));
-                localStorage.setItem("login",login);
+                localStorage.setItem("user", btoa(login + ":" + pass1));
+                localStorage.setItem("login", login);
                 console.log("Done");
             }).fail(function () {
                 console.log("Error");
@@ -54,9 +92,9 @@
     $("#loginAction").click(function () {
         const pass1 = $("#pass1").val();
         const login = $("#login").val();
-        localStorage.setItem("user",btoa(login + ":" + pass1));
-        localStorage.setItem("login",login);
-        window.location.href="index.html";
+        localStorage.setItem("user", btoa(login + ":" + pass1));
+        localStorage.setItem("login", login);
+        window.location.href = "index.html";
     });
 </script>
 </body>
