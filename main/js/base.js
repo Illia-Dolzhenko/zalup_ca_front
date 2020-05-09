@@ -7,6 +7,7 @@ const CATEGORIES_URL = "http://192.168.1.148:8080/categories";
 const RATE_URL = "http://192.168.1.148:8080/addRating";
 const VOTE_UP_URL = "http://192.168.1.148:8080/upVote/";
 const CURRENT_USER = "http://192.168.1.148:8080/user";
+const CAPTCHA_SITE_KEY ="6Lf0_PMUAAAAACUCzyejCEER-Fb9AII5VRbu_Jzu";
 
 const REGISTER_PAGE = "register.html";
 

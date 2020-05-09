@@ -10,6 +10,7 @@
             src="https://code.jquery.com/jquery-3.5.0.js"
             integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
             crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lf0_PMUAAAAACUCzyejCEER-Fb9AII5VRbu_Jzu"></script>
     <link rel="stylesheet" href="css/base.css?v=1.0">
     <link rel="stylesheet" href="css/header.css?v=1.0">
     <script src="js/base.js"></script>
@@ -17,13 +18,13 @@
 
 
     <style>
-        .title{
+        .title {
             text-align: center;
             padding-top: 5%;
             font-size: large;
         }
 
-        .buttonCentre{
+        .buttonCentre {
             text-align: center;
         }
     </style>
@@ -43,7 +44,7 @@
                 <a href="postForm.html">[New Post]</a>
             </div>
             <div id="logOutAction">
-                [LogOut]
+                [Log Out]
             </div>
         </div>
         <div id="currentUserLogin">
@@ -67,7 +68,7 @@
         <br>
 
         <div class="mdl-textfield mdl-js-textfield">
-            <textarea class="mdl-textfield__input" type="text" rows= "3" id="description" ></textarea>
+            <textarea class="mdl-textfield__input" type="text" rows="3" id="description"></textarea>
             <label class="mdl-textfield__label" for="description">Post description...</label>
         </div>
 
@@ -90,10 +91,13 @@
 <script>
     $("#submit").click(
         function () {
-            sendPost(CREATE_POST_URL, getData(), function f(data) {
-                //console.log(data);
-                localStorage.setItem("postId", data.id);
-                window.location.href = "post.html";
+            const data = getData();
+            grecaptcha.execute(CAPTCHA_SITE_KEY, {action: "createPost"}).then(function (token) {
+                data.token = token;
+                sendPost(CREATE_POST_URL, data, function (data) {
+                    localStorage.setItem("postId", data.id);
+                    window.location.href = "post.html";
+                });
             });
         }
     );

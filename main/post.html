@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/header.css?v=1.0">
     <script src="js/base.js"></script>
     <script src="js/header.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lf0_PMUAAAAACUCzyejCEER-Fb9AII5VRbu_Jzu"></script>
 
     <title>Post</title>
 
@@ -107,14 +108,14 @@
             width: 25%;
             height: 40%;
             background-color: white;
-            box-shadow: 0 0 25px black;
+            box-shadow: 0 0 25px gray;
             top: 30vh;
             left: 37.5%;
             z-index: 1;
             border-radius: 3px;
         }
 
-        .addRatingButton{
+        .addRatingButton {
             margin-left: auto;
             margin-right: auto;
         }
@@ -138,7 +139,7 @@
                 <a href="postForm.html">[New Post]</a>
             </div>
             <div id="logOutAction">
-                [LogOut]
+                [Log Out]
             </div>
         </div>
         <div id="currentUserLogin">
@@ -277,11 +278,17 @@
 
     $(document).on("click", "#sendComment", function () {
         console.log("send");
-        sendPost(ADD_COMMENT_URL, getData(), function (data) {
-            console.log(data);
-            $("#newCommentText").val(" ");
-            drawAll();
-            //location.reload();
+
+        const data = getData();
+
+        grecaptcha.execute(CAPTCHA_SITE_KEY, {action: "addComment"}).then(function (token) {
+            data.token = token;
+            console.log(token);
+            sendPost(ADD_COMMENT_URL, data, function (data) {
+                console.log(data);
+                $("#newCommentText").val(" ");
+                drawAll();
+            });
         });
     });
 
@@ -309,8 +316,13 @@
         $(this).attr("hidden", "true");
     });
 
-    $(document).on("click", "#addRating", function(){
-        $("#dialog").removeAttr("hidden");
+    $(document).on("click", "#addRating", function (e) {
+        const dialog = $("#dialog");
+        dialog.removeAttr("hidden");
+
+        dialog.css("top", e.pageY - dialog.height()/2 + "px");
+        dialog.css("left",e.pageX - dialog.width()/2 + "px");
+
     });
 
     function renderOptions(data) {

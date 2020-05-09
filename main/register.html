@@ -11,6 +11,7 @@
             src="https://code.jquery.com/jquery-3.5.0.js"
             integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
             crossorigin="anonymous"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lf0_PMUAAAAACUCzyejCEER-Fb9AII5VRbu_Jzu"></script>
 
     <style>
         body {
@@ -29,7 +30,7 @@
             margin-right: 5%;;
         }
 
-        .content{
+        .content {
             margin: 5%;
             padding-bottom: 5%;
         }
@@ -73,29 +74,36 @@
         const pass2 = $("#pass2").val();
         const login = $("#login").val();
 
-        if (pass1 === pass2) {
-            var user = new Object();
-            user.login = login;
-            user.password = pass1;
-            var response;
-            $.when(register(REGISTER_URL, user, response)).done(function () {
-                localStorage.setItem("user", btoa(login + ":" + pass1));
-                localStorage.setItem("login", login);
-                console.log("Done");
-            }).fail(function () {
-                console.log("Error");
-            })
+        grecaptcha.execute(CAPTCHA_SITE_KEY, {action: "register"}).then(function (token) {
+            if (pass1 === pass2) {
+                var user = new Object();
+                user.login = login;
+                user.password = pass1;
+                user.token = token;
+                var response;
+                $.when(register(REGISTER_URL, user, response)).done(function () {
+                    // localStorage.setItem("user", btoa(login + ":" + pass1));
+                    // localStorage.setItem("login", login);
+                    console.log("Done");
+                    logIn();
+                }).fail(function () {
+                    console.log("Error");
+                })
+            }
+        });
 
-        }
+
     });
 
-    $("#loginAction").click(function () {
+    $("#loginAction").click(logIn);
+
+    function logIn() {
         const pass1 = $("#pass1").val();
         const login = $("#login").val();
         localStorage.setItem("user", btoa(login + ":" + pass1));
         localStorage.setItem("login", login);
         window.location.href = "index.html";
-    });
+    }
 </script>
 </body>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lf0_PMUAAAAACUCzyejCEER-Fb9AII5VRbu_Jzu"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.5.0.js"
+            integrity="sha256-r/AaFHrszJtwpe+tHyNi/XCfMxYpbsRg2Uqn0x3s2zc="
+            crossorigin="anonymous"></script>
+    <script src="js/base.js"></script>
+
+
+</head>
+<body>
+
+<button id="test">
+    test captcha
+</button>
+
+<script>
+    // grecaptcha.ready(function () {
+    //
+    // });
+
+    $(document).on("click","#test", function (e) {
+        grecaptcha.execute(CAPTCHA_SITE_KEY, {action: "test"}).then(function (token) {
+
+            const data = new Object();
+            data.token = token;
+
+            sendPost("http://192.168.1.148:8080/test", data,function (data) {
+                console.log("token has been sent." + data)
+            });
+            console.log(token);
+        });
+    })
+
+
+</script>
+
+
+</body>
+</html>
